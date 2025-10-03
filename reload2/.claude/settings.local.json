@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm audit:*)",
+      "Bash(node:*)",
+      "Bash(curl -X POST \"https://oktiojqphavkqeirbbul.supabase.co/rest/v1/rpc\" -H \"apikey: sbp_8500b64c61daea9a863b23dd66a0c30afe33a3c6\" -H \"Authorization: Bearer sbp_8500b64c61daea9a863b23dd66a0c30afe33a3c6\" -H \"Content-Type: application/json\" -d \"{\"\"query\"\": \"\"CREATE TABLE IF NOT EXISTS public.users (id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE, email TEXT UNIQUE NOT NULL, role TEXT NOT NULL CHECK (role IN (''admin'', ''viewer'', ''editor'')), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, last_login TIMESTAMP);\"\"}\")",
+      "Bash(where:*)",
+      "Bash(curl -X POST \"https://kbbtxvbqxpwsgbbbhwty.supabase.co/rest/v1/rpc/exec\" -H \"apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtiYnR4dmJxeHB3c2diYmJod3R5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1OTIyMTYyMCwiZXhwIjoyMDc0Nzk3NjIwfQ.j0l5E7wS0XHkEuqmo7kpsnEF9wpk2DBKO2qL4hCaV6Q\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtiYnR4dmJxeHB3c2diYmJod3R5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1OTIyMTYyMCwiZXhwIjoyMDc0Nzk3NjIwfQ.j0l5E7wS0XHkEuqmo7kpsnEF9wpk2DBKO2qL4hCaV6Q\" -H \"Content-Type: application/json\" -d \"{\"\"query\"\": \"\"CREATE TABLE IF NOT EXISTS public.users (id UUID PRIMARY KEY, email TEXT UNIQUE NOT NULL, role TEXT NOT NULL CHECK (role IN (''admin'', ''viewer'', ''editor'')), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, last_login TIMESTAMP);\"\"}\")",
+      "Bash(npm install:*)",
+      "Bash(curl -s \"https://kbbtxvbqxpwsgbbbhwty.supabase.co/rest/v1/\" -H \"apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtiYnR4dmJxeHB3c2diYmJod3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkyMjE2MjAsImV4cCI6MjA3NDc5NzYyMH0.C7cYRM_uh2Mux7xsEa3VKx8b93u7AIZR--hXX3p67eU\")",
+      "Bash(npm run dev:*)",
+      "Bash(curl -X POST http://localhost:8081 -H \"Content-Type: application/json\" -d \"{\"\"email\"\":\"\"admin@example.com\"\",\"\"password\"\":\"\"TestAdmin2024!@#SecurePass\"\"}\" -v)",
+      "Bash(timeout 10 bash -c \"until curl -s http://localhost:8081 > /dev/null; do sleep 1; done\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

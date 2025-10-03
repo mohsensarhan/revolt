@@ -1,0 +1,63 @@
+*** Begin Patch
+*** Update File: src/lib/data-service.ts
+@@
+-    try {
+-      // Get current metrics for audit log
+-      const currentMetrics = await this.getExecutiveMetrics();
+-      
+-      const { data, error } = await supabaseAdmin
+-        .from('executive_metrics')
+-        .upsert([metrics])
+-        .select()
+-        .single();
++    try {
++      // Get current metrics for audit log
++      const currentMetrics = await this.getExecutiveMetrics();
++
++      const allowedKeys = new Set<keyof ExecutiveMetrics | 'scenario_factors' | 'id' | 'created_at' | 'updated_at'>([
++        'id',
++        'created_at',
++        'updated_at',
++        'meals_delivered',
++        'people_served',
++        'cost_per_meal',
++        'program_efficiency',
++        'revenue',
++        'expenses',
++        'reserves',
++        'cash_position',
++        'coverage_governorates',
++        'scenario_factors'
++      ]);
++
++      const sanitized: Record<string, unknown> = {};
++
++      for (const key of allowedKeys) {
++        const value = (metrics as Record<string, unknown>)[key as string];
++        if (value !== undefined && value !== null) {
++          sanitized[key as string] = value;
++        }
++      }
++
++      if (!('id' in sanitized) && currentMetrics?.id) {
++        sanitized.id = currentMetrics.id;
++      }
++
++      if (!('created_at' in sanitized) && currentMetrics?.created_at) {
++        sanitized.created_at = currentMetrics.created_at;
++      }
++
++      if (!('updated_at' in sanitized) && currentMetrics?.updated_at) {
++        sanitized.updated_at = currentMetrics.updated_at;
++      }
++
++      if (!('scenario_factors' in sanitized)) {
++        sanitized.scenario_factors = metrics.scenario_factors ?? currentMetrics?.scenario_factors ?? {};
++      }
++
++      const { data, error } = await supabaseAdmin
++        .from('executive_metrics')
++        .upsert([sanitized])
++        .select()
++        .single();
+*** End Patch

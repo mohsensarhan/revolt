@@ -1,0 +1,1 @@
+﻿const text = await page.locator('[data-testid="people-served-value"]').first().textContent();

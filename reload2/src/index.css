@@ -1,0 +1,405 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Executive Dashboard Design System - Inspired by Bloomberg & Modern BI Platforms */
+
+@layer base {
+  :root {
+    /* Scaling system variables - for unified responsive design */
+    --scale: 1;
+    --u: calc(1rem * var(--scale));
+    --vhAvailPx: 1080;
+    --rowHpx: 200px;
+    --gappx: 16px;
+    --rows: 4;
+    
+    /* Safe area variables for mobile */
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+
+    /* Dark Executive Theme */
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+
+    /* Card System */
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 98%;
+    --card-border: 0 0% 12%;
+
+    /* Executive Green Theme */
+    --primary: 142 69% 58%; /* #5FB85A - EFB Green */
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 142 69% 65%;
+
+    /* Financial Health Colors */
+    --success: 142 69% 58%; /* Green for positive metrics */
+    --warning: 38 100% 50%; /* Orange for efficiency metrics */
+    --danger: 0 84% 60%; /* Red for alerts/risks */
+    --neutral: 0 0% 98%; /* White for neutral data */
+
+    /* UI Elements */
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 90%;
+    --muted: 0 0% 8%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 0 0% 12%;
+    --accent-foreground: 0 0% 98%;
+
+    /* Borders & Inputs */
+    --border: 0 0% 15%;
+    --input: 0 0% 12%;
+    --ring: 142 69% 58%;
+
+    /* Executive Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(142 69% 65%));
+    --gradient-warning: linear-gradient(135deg, hsl(var(--warning)), hsl(45 100% 60%));
+    --gradient-danger: linear-gradient(135deg, hsl(var(--danger)), hsl(0 84% 70%));
+    --gradient-dark: linear-gradient(135deg, hsl(var(--card)), hsl(0 0% 8%));
+
+    /* Executive Shadows */
+    --shadow-executive: 0 25px 50px -12px hsl(0 0% 0% / 0.6);
+    --shadow-card: 0 8px 30px -8px hsl(0 0% 0% / 0.4);
+    --shadow-glow: 0 0 30px hsl(var(--primary) / 0.3);
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  /* Light mode overrides (for user preference) */
+  .light {
+    --background: 0 0% 98%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --border: 0 0% 90%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html, body {
+    height: 100vh;
+    font-size: 1rem; /* CRITICAL: Never change this - prevents double scaling */
+    overflow: hidden; /* Prevent all document scrolling */
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+  }
+
+  /* Prevent any element from causing horizontal overflow */
+  * {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  /* Remove spinner arrows from all number inputs and sliders */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    display: none;
+  }
+  
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  
+  /* Aggressively remove ALL spinner arrows from ANY input */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    display: none !important;
+  }
+  
+  /* Remove from all inputs regardless of type */
+  input {
+    -moz-appearance: textfield;
+  }
+  
+  /* Remove from Radix Slider specifically */
+  [role="slider"]::-webkit-outer-spin-button,
+  [role="slider"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    display: none !important;
+  }
+  
+  /* Remove from any element with slider in class name */
+  [class*="slider"]::-webkit-outer-spin-button,
+  [class*="slider"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    display: none !important;
+  }
+  
+  /* Remove any default slider arrows */
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+  }
+  
+  input[type="range"]::-moz-range-thumb {
+    border: none;
+    background: transparent;
+  }
+  
+  /* NUCLEAR OPTION: Remove ALL possible spinner arrows from EVERYTHING */
+  * {
+    -webkit-appearance: none !important;
+  }
+  
+  *::-webkit-outer-spin-button,
+  *::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+    display: none !important;
+  }
+  
+  /* Target Radix UI Slider specifically */
+  [data-radix-slider-track] *,
+  [data-radix-slider-range] *,
+  [data-radix-slider-thumb] * {
+    -webkit-appearance: none !important;
+    -moz-appearance: textfield !important;
+  }
+  
+  [data-radix-slider-track] *::-webkit-outer-spin-button,
+  [data-radix-slider-track] *::-webkit-inner-spin-button,
+  [data-radix-slider-range] *::-webkit-outer-spin-button,
+  [data-radix-slider-range] *::-webkit-inner-spin-button,
+  [data-radix-slider-thumb] *::-webkit-outer-spin-button,
+  [data-radix-slider-thumb] *::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+    display: none !important;
+  }
+  /* Ensure containers don't overflow */
+  .container, .w-full, [class*="w-full"] {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Executive Typography - now using scaled units */
+  h1, .heading-xl { 
+    font-size: calc(2.5 * var(--u));
+    @apply font-bold tracking-tight;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  h2, .heading-lg { 
+    font-size: calc(2 * var(--u));
+    @apply font-semibold tracking-tight;
+  }
+  
+  h3, .heading-md { 
+    font-size: calc(1.5 * var(--u));
+    @apply font-semibold;
+  }
+  
+  .metric-value {
+    font-size: calc(2.5 * var(--u));
+    @apply font-bold tracking-tight tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+  
+  .metric-label {
+    font-size: calc(0.875 * var(--u));
+    @apply font-medium text-muted-foreground uppercase tracking-wider;
+  }
+
+  /* Executive Animations */
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@layer components {
+  /* Executive Card Variants - now using scaled units */
+  .executive-card {
+    @apply bg-card border border-card-border rounded-xl shadow-card;
+    backdrop-filter: blur(10px);
+    padding: calc(1.5 * var(--u));
+    border-radius: calc(var(--radius) * var(--scale));
+    max-width: 100%;
+    overflow: hidden;
+  }
+  
+  .executive-card-hover {
+    @apply executive-card transition-all duration-300;
+    max-width: 100%;
+  }
+  
+  .executive-card-hover:hover {
+    @apply shadow-executive;
+    transform: scale(1.01);
+  }
+  
+  .metric-card {
+    @apply executive-card-hover relative overflow-hidden;
+    min-height: calc(8 * var(--u));
+    max-width: 100%;
+  }
+  
+  .metric-card::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none;
+  }
+  
+  /* Gauge Components - scaled */
+  .gauge-container {
+    @apply relative w-full;
+    height: calc(8 * var(--u));
+  }
+  
+  /* Interactive Elements - scaled */
+  .scenario-slider {
+    @apply w-full bg-muted rounded-full appearance-none cursor-pointer;
+    height: calc(0.5 * var(--u));
+  }
+  
+  /* Mobile-specific optimizations */
+  @media (max-width: 768px) {
+    .executive-card {
+      padding: calc(1 * var(--u));
+    }
+    
+    .metric-card {
+      min-height: calc(6 * var(--u));
+    }
+    
+    .heading-lg {
+      font-size: calc(1.5 * var(--u));
+    }
+    
+    .metric-value {
+      font-size: calc(2 * var(--u));
+    }
+  }
+
+  /* Tablet-specific optimizations */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .executive-card {
+      padding: calc(1.25 * var(--u));
+    }
+  }
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 20px hsl(var(--primary) / 0.3); }
+  to { box-shadow: 0 0 30px hsl(var(--primary) / 0.6), 0 0 40px hsl(var(--primary) / 0.3); }
+}
+
+/*
+  RESPONSIVE PAGE GRID SYSTEM
+
+  Automatically adapts multi-column grids for optimal readability across all devices.
+  This system ensures data visualizations and charts remain legible on mobile devices
+  by intelligently reducing column counts.
+
+  Key Features:
+  - Desktop (≥1024px): Uses specified column count (e.g., cols={4})
+  - Tablet (640px-1023px): 4-col and 3-col grids become 2-col
+  - Mobile (<640px): 4-col and 3-col grids become 2-col with optimized spacing
+
+  This applies globally to ALL PageGrid components without requiring manual breakpoints.
+*/
+
+.page-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 12), minmax(0, 1fr));
+  grid-auto-rows: var(--rowHpx, 200px);
+  gap: var(--gappx, 16px);
+}
+
+/* RESPONSIVE GRID SYSTEM - Automatic column adaptation for readability */
+/* Mobile-first approach: 2 columns on small screens, scale up on larger screens */
+@media (max-width: 1023px) {
+  /* Tablet and below: Force 2 columns for chart grids (4-col grids become 2-col) */
+  .page-grid[style*="--cols:4"],
+  .page-grid[style*="--cols: 4"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  /* 3-column grids also become 2 columns on tablet */
+  .page-grid[style*="--cols:3"],
+  .page-grid[style*="--cols: 3"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 639px) {
+  /* Mobile phones: Consider full-width for very small screens */
+  .page-grid[style*="--cols:4"],
+  .page-grid[style*="--cols: 4"],
+  .page-grid[style*="--cols:3"],
+  .page-grid[style*="--cols: 3"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: var(--gappx, 12px);
+  }
+
+  /* Adjust row height for mobile */
+  .page-grid {
+    grid-auto-rows: minmax(180px, auto);
+  }
+
+  /* Mobile-optimized card heights - allow cards to grow to fit content */
+  .executive-card {
+    min-height: 280px !important;
+    height: auto !important;
+  }
+
+  /* Adjust font sizes for readability on mobile */
+  .executive-card h3 {
+    font-size: 0.75rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .executive-card .text-2xl {
+    font-size: 1.25rem !important;
+  }
+
+  .executive-card .text-xs {
+    font-size: 0.625rem !important;
+  }
+}
+
+/* GLOBAL RULE: Charts should always fill their flex container */
+.executive-card .recharts-responsive-container {
+  min-height: 120px !important;
+}
+
+@media (min-width: 640px) {
+  .executive-card .recharts-responsive-container {
+    min-height: 140px !important;
+  }
+}
+
+/* Optional helpers for spanning rows with the same rhythm */
+.page-grid > .rows-2 { grid-row: span 2 / span 2; }
+.page-grid > .rows-3 { grid-row: span 3 / span 3; }
+/* add more as needed */

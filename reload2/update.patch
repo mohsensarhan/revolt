@@ -1,0 +1,80 @@
+*** Begin Patch
+*** Update File: src/lib/data-service.ts
+@@
+-import { supabase, supabaseAdmin, Database } from './supabase';
+-
+-export interface ExecutiveMetrics {
+-  id?: number;
+-  created_at?: string;
+-  updated_at?: string;
+-  meals_delivered: number;
+-  people_served: number;
+-  cost_per_meal: number;
+-  program_efficiency: number;
+-  revenue: number;
+-  expenses: number;
+-  reserves: number;
+-  cash_position: number;
+-  coverage_governorates: number;
+-  scenario_factors?: Record<string, number>;
+-}
++import { supabase, supabaseAdmin, Database } from './supabase';
++
++export interface ScenarioFactors {
++  economicGrowth: number;
++  inflationRate: number;
++  donorSentiment: number;
++  operationalEfficiency: number;
++  foodPrices: number;
++  unemploymentRate: number;
++  corporateCSR: number;
++  governmentSupport: number;
++  exchangeRateEGP: number;
++  logisticsCostIndex: number;
++  regionalShock: number;
++}
++
++export interface ChartData {
++  revenueChange: number;
++  demandChange: number;
++  costChange: number;
++  efficiencyChange: number;
++  reserveChange: number;
++  cashChange: number;
++  mealsChange: number;
++}
++
++export interface GlobalIndicators {
++  egyptInflation: number;
++  egyptCurrency: number;
++  egyptFoodInsecurity: number;
++  globalInflation: number;
++  globalFoodPrices: number;
++  emergingMarketRisk: number;
++}
++
++export interface ExecutiveMetrics {
++  id?: number;
++  created_at?: string;
++  updated_at?: string;
++  meals_delivered: number;
++  people_served: number;
++  cost_per_meal: number;
++  program_efficiency: number;
++  revenue: number;
++  expenses: number;
++  reserves: number;
++  cash_position: number;
++  coverage_governorates: number;
++  scenario_factors?: ScenarioFactors;
++  chartData?: ChartData;
++  globalIndicators?: GlobalIndicators;
++  revenueChange?: number;
++  demandChange?: number;
++  costChange?: number;
++  efficiencyChange?: number;
++  reserveChange?: number;
++  cashChange?: number;
++  mealsChange?: number;
++}
+*** End Patch

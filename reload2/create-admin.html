@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Admin User - EFB Dashboard</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .status {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin: 20px 0;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background: #45a049;
+        }
+        .button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        .success {
+            background: rgba(76, 175, 80, 0.3);
+            border: 2px solid #4CAF50;
+        }
+        .error {
+            background: rgba(244, 67, 54, 0.3);
+            border: 2px solid #f44336;
+        }
+        .instructions {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .instructions h3 {
+            margin-top: 0;
+        }
+        .instructions ul {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Create Admin User</h1>
+        
+        <div class="instructions">
+            <h3>📋 Instructions:</h3>
+            <ul>
+                <li>Click the "Create Admin User" button below</li>
+                <li>This will create an admin user with credentials: <strong>admin@example.com / 123</strong></li>
+                <li>Wait for the process to complete</li>
+                <li>Once successful, you can login at <a href="http://localhost:8084/admin" target="_blank">http://localhost:8084/admin</a></li>
+            </ul>
+        </div>
+
+        <button id="createButton" class="button" onclick="createAdminUser()">
+            🚀 Create Admin User
+        </button>
+
+        <div id="status" class="status">
+            Ready to create admin user...
+        </div>
+
+        <div id="result" style="display: none;"></div>
+    </div>
+
+    <script type="module">
+        // Import the Supabase client
+        const supabaseUrl = 'https://oktiojqphavkqeirbbul.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rdGlvanFwaGF2a3FlaXJiYnVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkyMjE3OTksImV4cCI6MjA3NDc5Nzc5OX0.3GUfIRtpx5yMKOxAte25IG3O5FlmYxjG21SEjPMFggc';
+        const supabaseServiceRoleKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rdGlvanFwaGF2a3FlaXJiYnVsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1OTIyMTc5OSwiZXhwIjoyMDc0Nzk3Nzk5fQ.poQL_q2pDavh7unnpAYpFGV4qJg2UCOWYxkwqx1qJZU';
+
+        async function createSupabaseClient(key) {
+            const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+            return createClient(supabaseUrl, key);
+        }
+
+        async function createAdminUser() {
+            const button = document.getElementById('createButton');
+            const status = document.getElementById('status');
+            const result = document.getElementById('result');
+            
+            button.disabled = true;
+            button.textContent = '⏳ Creating Admin User...';
+            status.className = 'status';
+            result.style.display = 'none';
+
+            try {
+                status.textContent = '🔧 Step 1: Creating Supabase clients...';
+                
+                const supabase = await createSupabaseClient(supabaseAnonKey);
+                const supabaseAdmin = await createSupabaseClient(supabaseServiceRoleKey);
+
+                status.textContent += '\n✅ Supabase clients created\n';
+                status.textContent += '🔧 Step 2: Creating admin user in auth system...';
+
+                // Step 1: Create the auth user
+                const { data: authData, error: authError } = await supabaseAdmin.auth.signUp({
+                    email: 'admin@example.com',
+                    password: '123',
+                });
+
+                if (authError) {
+                    if (authError.message.includes('already registered') || authError.message.includes('already in use')) {
+                        status.textContent += '\n✅ Admin user already exists in auth system';
+                    } else {
+                        throw new Error(`Auth error: ${authError.message}`);
+                    }
+                } else {
+                    status.textContent += '\n✅ Auth user created successfully';
+                }
+
+                status.textContent += '\n🔧 Step 3: Getting user info...';
+
+                // Step 2: Get the user ID (we need to sign in first to get the user)
+                const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+                    email: 'admin@example.com',
+                    password: '123',
+                });
+
+                if (signInError) {
+                    status.textContent += '\n⚠️  Could not sign in (this is normal if user was just created)';
+                    status.textContent += '\n🔧 Step 4: Creating user record directly...';
+                    
+                    // Create user record directly without auth user ID
+                    const { data: userData, error: userError } = await supabaseAdmin
+                        .from('users')
+                        .insert([{
+                            email: 'admin@example.com',
+                            role: 'admin',
+                        }])
+                        .select()
+                        .single();
+
+                    if (userError) {
+                        if (userError.code === '23505') { // Unique violation
+                            status.textContent += '\n✅ User record already exists';
+                        } else {
+                            throw new Error(`User record error: ${userError.message}`);
+                        }
+                    } else {
+                        status.textContent += '\n✅ User record created successfully';
+                    }
+                } else {
+                    status.textContent += '\n✅ Successfully signed in';
+                    status.textContent += '\n🔧 Step 4: Creating user record...';
+
+                    const { data: userData, error: userError } = await supabaseAdmin
+                        .from('users')
+                        .upsert([{
+                            id: signInData.user.id,
+                            email: 'admin@example.com',
+                            role: 'admin',
+                        }])
+                        .select()
+                        .single();
+
+                    if (userError) {
+                        throw new Error(`User record error: ${userError.message}`);
+                    } else {
+                        status.textContent += '\n✅ User record created successfully';
+                    }
+
+                    // Sign out
+                    await supabase.auth.signOut();
+                }
+
+                status.textContent += '\n\n🎉 Admin user setup completed!';
+                status.textContent += '\n📋 Admin User Details:';
+                status.textContent += '\n   - Email: admin@example.com';
+                status.textContent += '\n   - Password: 123';
+                status.textContent += '\n   - Role: admin';
+                
+                status.className = 'status success';
+                
+                result.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Success! Admin user created</h3>
+                        <p>You can now login to the admin panel:</p>
+                        <ul>
+                            <li><strong>URL:</strong> <a href="http://localhost:8084/admin" target="_blank">http://localhost:8084/admin</a></li>
+                            <li><strong>Email:</strong> admin@example.com</li>
+                            <li><strong>Password:</strong> 123</li>
+                        </ul>
+                        <p><strong>Note:</strong> If you still can't login, you may need to verify the user email in Supabase or check that the database tables are properly set up.</p>
+                    </div>
+                `;
+                result.style.display = 'block';
+                
+                button.textContent = '✅ Admin User Created';
+                button.className = 'button success';
+
+            } catch (error) {
+                console.error('Error:', error);
+                status.textContent += `\n\n❌ Error: ${error.message}`;
+                status.className = 'status error';
+                
+                result.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Failed to create admin user</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p><strong>Troubleshooting:</strong></p>
+                        <ul>
+                            <li>Check your Supabase project URL and keys</li>
+                            <li>Ensure your Supabase project is active</li>
+                            <li>Verify you have internet connection</li>
+                            <li>Check that the database tables exist</li>
+                        </ul>
+                        <p>You can also create the admin user manually in the Supabase dashboard:</p>
+                        <ol>
+                            <li>Go to your Supabase project</li>
+                            <li>Authentication > Users > Create user</li>
+                            <li>Email: admin@example.com, Password: 123</li>
+                            <li>Table Editor > Users table</li>
+                            <li>Create record with email: admin@example.com, role: admin</li>
+                        </ol>
+                    </div>
+                `;
+                result.style.display = 'block';
+                
+                button.textContent = '❌ Failed - Try Again';
+                button.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
